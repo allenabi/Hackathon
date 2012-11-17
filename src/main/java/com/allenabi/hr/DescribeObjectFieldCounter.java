@@ -17,9 +17,7 @@ import org.apache.hadoop.util.ToolRunner;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +30,7 @@ import java.util.Map;
  * the code is just copied from the models and mapper package.
  *
  */
-public class DescribeGlobal extends Configured implements Tool {
+public class DescribeObjectFieldCounter extends Configured implements Tool {
 
 	public enum Count {
 		RECORDS_SKIPPED,
@@ -57,7 +55,7 @@ public class DescribeGlobal extends Configured implements Tool {
 			String inputString = value.toString();
 
             final Map map = mapper.readValue(inputString, Map.class);
-            final List sobjects = (List) map.get("sobjects");
+            final List fields = (List) map.get("fields");
 
 //			try {
 //				// This code is copied from the constructor of StockExchangeRecord
@@ -88,9 +86,9 @@ public class DescribeGlobal extends Configured implements Tool {
 //			}
 
 //			context.getCounter(Count.TOTAL_KEYS).increment(1);
-			context.getCounter(Count.TOTAL_KEYS).increment(sobjects.size());
+			context.getCounter(Count.TOTAL_KEYS).increment(fields.size());
 //			context.write(TOTAL_COUNT, ONE_COUNT);
-			context.write(TOTAL_COUNT, new LongWritable(sobjects.size()));
+			context.write(TOTAL_COUNT, new LongWritable(fields.size()));
 		}
 
         private final ObjectMapper mapper = new ObjectMapper();
@@ -154,7 +152,7 @@ public class DescribeGlobal extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int result = ToolRunner.run(new Configuration(), new DescribeGlobal(), args);
+		int result = ToolRunner.run(new Configuration(), new DescribeObjectFieldCounter(), args);
 		System.exit(result);
 	}
 }

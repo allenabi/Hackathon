@@ -30,7 +30,7 @@ import java.util.Map;
  * the code is just copied from the models and mapper package.
  *
  */
-public class DescribeObjectChildren extends Configured implements Tool {
+public class DescribeGlobalCounter extends Configured implements Tool {
 
 	public enum Count {
 		RECORDS_SKIPPED,
@@ -55,7 +55,7 @@ public class DescribeObjectChildren extends Configured implements Tool {
 			String inputString = value.toString();
 
             final Map map = mapper.readValue(inputString, Map.class);
-            final List children = (List) map.get("childRelationships");
+            final List sobjects = (List) map.get("sobjects");
 
 //			try {
 //				// This code is copied from the constructor of StockExchangeRecord
@@ -86,9 +86,9 @@ public class DescribeObjectChildren extends Configured implements Tool {
 //			}
 
 //			context.getCounter(Count.TOTAL_KEYS).increment(1);
-			context.getCounter(Count.TOTAL_KEYS).increment(children.size());
+			context.getCounter(Count.TOTAL_KEYS).increment(sobjects.size());
 //			context.write(TOTAL_COUNT, ONE_COUNT);
-			context.write(TOTAL_COUNT, new LongWritable(children.size()));
+			context.write(TOTAL_COUNT, new LongWritable(sobjects.size()));
 		}
 
         private final ObjectMapper mapper = new ObjectMapper();
@@ -152,7 +152,7 @@ public class DescribeObjectChildren extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int result = ToolRunner.run(new Configuration(), new DescribeObjectChildren(), args);
+		int result = ToolRunner.run(new Configuration(), new DescribeGlobalCounter(), args);
 		System.exit(result);
 	}
 }
