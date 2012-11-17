@@ -1,0 +1,1 @@
+this folder should contain the output from running the DescribeGlobal job
